@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();// // quarto que fez o pedido
-            $table->enum('status',['pendente','confirmado','preparando','entregue']);//situação do pédido
-            $table->integer('estimated_time')->nullable()->default('pendente'); // tempo estimado em minutos
+            $table->enum('status',['pendente','confirmado','preparando','entregue'])->default('pendente');//situação do pedido
+            $table->integer('estimated_time')->nullable(); // tempo estimado em minutos
             $table->timestamps();
         });
     }
