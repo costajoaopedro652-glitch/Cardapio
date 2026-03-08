@@ -16,7 +16,7 @@ class ItemController extends Controller
         return view('items.index', compact('items'));
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      */
     public function create()
