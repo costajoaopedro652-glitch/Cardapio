@@ -11,11 +11,13 @@ class Order extends Model
         'user_id',
         'status',
         'estimated_time',
+        'total',
     ];
     public function user(){
         return $this->belongsTo(User::class); // Pedido pertence a um usuário (quarto)
     }
-    public function items(){
-        return $this->hasMany(Order_Item::class); // Pedido possui vários itens
-    }
+    public function order_items()
+{
+    return $this->hasMany(Order_Item::class);
+}
 }

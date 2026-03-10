@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('Item', function (Blueprint $table) {
-            $table->boolean('is_available')->default(false);
-        });
+        Schema::table('orders', function (Blueprint $table) {
+    $table->decimal('total', 10, 2)->default(0);
+    });
     }
 
     /**
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('Item', function (Blueprint $table) {
-            $table->dropColumn('is_available');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn('total');
         });
     }
 };

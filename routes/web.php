@@ -8,11 +8,14 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
+Route::get('items/cart', [ItemController::class, 'cart'])->name('cart.index')->middleware('auth');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina/admin');
+Route::get('items/PedidoSucesso', [ItemController::class, 'PedidoSucesso'])->name('PedidoSucesso.index')->middleware('auth');
+Route::post('items/cart/confirmarPedido', [ItemController::class, 'confirmarPedido'])->name('confirmarPedido')->middleware('auth');
 Route::middleware(['auth'])->group(function (){
     Route::resource('items',ItemController::class);
 });
