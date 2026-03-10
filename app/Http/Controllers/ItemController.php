@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Order;
+use App\Models\Order_Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -21,16 +24,42 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+{
+    $item = Item::findOrFail($request->item_id);
+
+    $order = Order::firstOrCreate([
+        'user_id' => auth()->id(),
+        'status' => 'pendente'
+    ]);
+
+    // verifica se o item já está no carrinho
+    $orderItem = Order_Item::where('order_id', $order->id)
+        ->where('item_id', $item->id)
+        ->first();
+
+    if ($orderItem) {
+        // aumenta quantidade
+        $orderItem->quantidade += 1;
+        $orderItem->save();
+    } else {
+        // cria novo item no carrinho
+        Order_Item::create([
+            'order_id' => $order->id,
+            'item_id' => $item->id,
+            'quantity' => 1,
+            'price' => $item->price
+        ]);
     }
+
+    return redirect()->back();
+}
 
     /**
      * Display the specified resource.
@@ -61,6 +90,51 @@ class ItemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+    $orderItem = Order_Item::findOrFail($id);
+    $orderItem->delete();
+
+    return redirect()->back();
     }
+
+    public function cart()
+{
+    $order = Order::where('user_id', auth()->id())->first();
+    $orderItems = $order ? $order->order_items : collect();
+
+    return view('items.cart', compact('orderItems'));
 }
+
+
+public function confirmarPedido()
+{
+    
+    $order = Order::where('user_id', auth()->id())
+    ->where('status','pendente')->first();
+
+    if (!$order || $order->order_items->isEmpty()) {
+        return redirect()->back()->with('error', 'Carrinho vazio');
+    }
+
+    $total = $order->order_items->sum(function ($item) {
+        return $item->price * $item->quantidade;
+    });
+    // atualiza status para confirmado
+    $order->update([
+        'status' => 'confirmado',
+        'total'=>$total,
+]);
+
+return redirect()->route('PedidoSucesso.index');
+}
+
+public function PedidoSucesso(){
+    return view('items.PedidoSucesso');
+}
+
+public function pedidos(){
+    $orders= Order::where('status','confirmado')->with('order_items.item','user')->get();
+
+    return view('admin.pedidos', compact('orders'));
+}
+}
+
