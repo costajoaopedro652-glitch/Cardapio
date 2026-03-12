@@ -10,9 +10,15 @@
     @foreach ($orders as $order )
     <div>
         <h2>valor total:{{$order->total}} nome do quarto:{{$order->user->name}}</h2> 
-        <form action=""><button type="submit"></button></form>
+        <form action="{{route('FinalizarPedido', $order->id)}}" method="Post">
+            @csrf
+            <button type="submit">Finalizar Pedido</button>
+        </form>
     </div>
         
     @endforeach
+        <div>
+            <button><a href="{{route('items.index')}}">voltar para cardápio</a></button>
+        </div>
 </body>
 </html>
