@@ -7,5 +7,8 @@
 </head>
 <body>
     <h1>Pedido Feito Com Sucesso. Aguarde</h1>
+    <div>
+            <button><a href="{{route('items.index')}}">voltar para cardápio</a></button>
+        </div>
 </body>
 </html>
