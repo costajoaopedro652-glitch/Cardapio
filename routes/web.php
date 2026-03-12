@@ -13,7 +13,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina/admin');
+//rotas Da Página Dos ADMIN's:
+Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina.admin');
+Route::post('pagina/admin/FinalizarPedido{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido')->middleware('auth');
+
+//Rotas Dos Pedidos
 Route::get('items/PedidoSucesso', [ItemController::class, 'PedidoSucesso'])->name('PedidoSucesso.index')->middleware('auth');
 Route::post('items/cart/confirmarPedido', [ItemController::class, 'confirmarPedido'])->name('confirmarPedido')->middleware('auth');
 Route::middleware(['auth'])->group(function (){
