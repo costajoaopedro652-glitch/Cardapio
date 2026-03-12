@@ -34,26 +34,29 @@ class ItemController extends Controller
 {
     $item = Item::findOrFail($request->item_id);
 
-    $order = Order::firstOrCreate([
-        'user_id' => auth()->id(),
-        'status' => 'pendente'
-    ]);
+    $order = Order::where('user_id', auth()->id())
+        ->where('status', 'pendente')
+        ->first();
 
-    // verifica se o item já está no carrinho
+    if (!$order) {
+        $order = Order::create([
+            'user_id' => auth()->id(),
+            'status' => 'pendente'
+        ]);
+    }
+
     $orderItem = Order_Item::where('order_id', $order->id)
         ->where('item_id', $item->id)
         ->first();
 
     if ($orderItem) {
-        // aumenta quantidade
         $orderItem->quantidade += 1;
         $orderItem->save();
     } else {
-        // cria novo item no carrinho
         Order_Item::create([
             'order_id' => $order->id,
             'item_id' => $item->id,
-            'quantity' => 1,
+            'quantidade' => 1,
             'price' => $item->price
         ]);
     }
@@ -98,7 +101,10 @@ class ItemController extends Controller
 
     public function cart()
 {
-    $order = Order::where('user_id', auth()->id())->first();
+    $order = Order::where('user_id', auth()->id())
+        ->where('status', 'pendente')
+        ->first();
+
     $orderItems = $order ? $order->order_items : collect();
 
     return view('items.cart', compact('orderItems'));
@@ -135,6 +141,15 @@ public function pedidos(){
     $orders= Order::where('status','confirmado')->with('order_items.item','user')->get();
 
     return view('admin.pedidos', compact('orders'));
+}
+public function FinalizarPedido($id){
+    $order = Order::findOrFail($id);
+
+    $order->update([
+        'status' => 'entregue'
+    ]);
+
+    return redirect()->back()->with('success', 'Pedido finalizado!');
 }
 }
 
