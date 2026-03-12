@@ -23,4 +23,7 @@
     <div>
         <button><a href="{{route('cart.index')}}">Ir para Carrinho</a></button>
     </div>
+    <div>
+        <button><a href="{{route('pagina.admin')}}">Ir aos pedidos</a></button>
+    </div>
 @endsection
