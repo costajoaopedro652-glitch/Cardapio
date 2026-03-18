@@ -2,13 +2,17 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
+use App\Models\User;
+use App\Policies\OrderPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
+    protected $policies = [
+        User::class=> UserPolicy::class
+    ];
     public function register(): void
     {
         //

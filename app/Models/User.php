@@ -9,6 +9,13 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
+    const ROLE_ADMIN= 'admin';
+    const ROLE_QUARTO='quarto';
+    public function is_admin(){
+        if($this->role=== self::ROLE_ADMIN){
+            return true;
+        }
+    }
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 

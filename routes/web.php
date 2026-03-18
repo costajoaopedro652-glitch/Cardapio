@@ -15,8 +15,12 @@ Route::get('/dashboard', function () {
 
 //rotas Da Página Dos ADMIN's:
 Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina.admin');
-Route::post('pagina/admin/FinalizarPedido{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido')->middleware('auth');
-
+Route::post('pagina/admin/FinalizarPedido/{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido')->middleware('auth');
+//Rotas Cardápio:
+Route::get('items/manha', [ItemController::class, 'cardapioManha'])->name('cardapioManha')->middleware('auth');
+Route::get('items/almoço', [ItemController::class, 'cardapioAlmoço'])->name('cardapioAlmoço')->middleware('auth');
+Route::get('items/tarde', [ItemController::class, 'cardapioTarde'])->name('cardapioTarde')->middleware('auth');
+Route::get('items/noite', [ItemController::class, 'cardapioNoite'])->name('cardapioNoite')->middleware('auth');
 //Rotas Dos Pedidos
 Route::get('items/PedidoSucesso', [ItemController::class, 'PedidoSucesso'])->name('PedidoSucesso.index')->middleware('auth');
 Route::post('items/cart/confirmarPedido', [ItemController::class, 'confirmarPedido'])->name('confirmarPedido')->middleware('auth');
@@ -28,5 +32,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+// AJAX
+Route::get('admin/verificar-pedidos',[ItemController::class,'verificarPedidos']);
+Route::get('admin/pedidos-json',[ItemController::class,'pedidosJson']);
+
 
 require __DIR__.'/auth.php';

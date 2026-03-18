@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Order_Item;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +16,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::all();
-        return view('items.index', compact('items'));
+        return view('items.index');
+        // $items = Item::all();
+        // return view('items.index', compact('items'));
     }
 
     /** 
@@ -107,9 +109,12 @@ class ItemController extends Controller
 
     $orderItems = $order ? $order->order_items : collect();
 
-    return view('items.cart', compact('orderItems'));
-}
+    $total = $orderItems->sum(function ($item) {
+        return $item->price * $item->quantidade;
+    });
 
+    return view('items.cart', compact('orderItems','total'));
+}
 
 public function confirmarPedido()
 {
@@ -140,7 +145,11 @@ public function PedidoSucesso(){
 public function pedidos(){
     $orders= Order::where('status','confirmado')->with('order_items.item','user')->get();
 
-    return view('admin.pedidos', compact('orders'));
+    $items = Order::with('order_items.item','user')->get();
+    return view('admin.pedidos', compact([
+        'orders',
+        'items'
+    ]));
 }
 public function FinalizarPedido($id){
     $order = Order::findOrFail($id);
@@ -150,6 +159,39 @@ public function FinalizarPedido($id){
     ]);
 
     return redirect()->back()->with('success', 'Pedido finalizado!');
+}
+public function cardapioManha(){
+    $items = Item::where('categoria','manha')->get();
+        return view('cadapios.cardapioManha', compact('items'));
+}
+public function cardapioAlmoço(){
+    $items = Item::where('categoria','almoço')->get();
+        return view('cadapios.cardapioAlmoço', compact('items'));
+}
+public function cardapioTarde(){
+    $items = Item::where('categoria','tarde')->get();
+        return view('cadapios.cardapioTarde', compact('items'));
+}
+public function cardapioNoite(){
+    $items = Item::where('categoria','noite')->get();
+        return view('cadapios.cardapioNoite', compact('items'));
+}
+public function verificarPedidos()
+{
+    $pedidos = Order::where('status','confirmado')->count();
+
+    return response()->json([
+        'pedidos' => $pedidos
+    ]);
+}
+public function pedidosJson()
+{
+    $orders = Order::where('status','confirmado')
+        ->with('order_items.item','user')
+        ->latest()
+        ->get();
+
+    return response()->json($orders);
 }
 }
 
