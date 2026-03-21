@@ -12,12 +12,14 @@ class User extends Authenticatable
 {
     use HasRoles;
     const ROLE_ADMIN= 'admin';
-    const ROLE_QUARTO='quarto';
-    public function is_admin(){
-        if($this->role=== self::ROLE_ADMIN){
-            return true;
-        }
+    const ROLE_ROOM='room';
+    public function isAdmin(){
+    return $this->hasRole(self::ROLE_ADMIN);
     }
+    public function isRoom(){
+    return $this->hasRole(self::ROLE_ROOM);
+    }
+    
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
@@ -30,7 +32,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+
     ];
 
     /**
