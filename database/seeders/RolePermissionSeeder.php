@@ -53,7 +53,7 @@ class RolePermissionSeeder extends Seeder
                 'password'=> Hash::make(12345678)
             ]
             );
-        $roomUser->assignRole($room)
+        $roomUser->assignRole($room);
 }
 
 }
