@@ -14,16 +14,16 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //rotas Da Página Dos ADMIN's:
-Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina.admin');
-Route::post('pagina/admin/FinalizarPedido/{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido')->middleware('auth');
+Route::get('pagina/admin',[ItemController::class,'pedidos'])->name('pagina.admin')->middleware('permission:ver pedidos');
+Route::post('pagina/admin/FinalizarPedido/{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido')->middleware('permission:ver pedidos');
 //Rotas Cardápio:
-Route::get('items/manha', [ItemController::class, 'cardapioManha'])->name('cardapioManha')->middleware('auth');
-Route::get('items/almoço', [ItemController::class, 'cardapioAlmoço'])->name('cardapioAlmoço')->middleware('auth');
-Route::get('items/tarde', [ItemController::class, 'cardapioTarde'])->name('cardapioTarde')->middleware('auth');
-Route::get('items/noite', [ItemController::class, 'cardapioNoite'])->name('cardapioNoite')->middleware('auth');
+Route::get('items/manha', [ItemController::class, 'cardapioManha'])->name('cardapioManha')->middleware('permission:ver cardapio');
+Route::get('items/almoço', [ItemController::class, 'cardapioAlmoço'])->name('cardapioAlmoço')->middleware('permission:ver cardapio');;
+Route::get('items/tarde', [ItemController::class, 'cardapioTarde'])->name('cardapioTarde')->middleware('permission:ver cardapio');;
+Route::get('items/noite', [ItemController::class, 'cardapioNoite'])->name('cardapioNoite')->middleware('permission:ver cardapio');;
 //Rotas Dos Pedidos
-Route::get('items/PedidoSucesso', [ItemController::class, 'PedidoSucesso'])->name('PedidoSucesso.index')->middleware('auth');
-Route::post('items/cart/confirmarPedido', [ItemController::class, 'confirmarPedido'])->name('confirmarPedido')->middleware('auth');
+Route::get('items/PedidoSucesso', [ItemController::class, 'PedidoSucesso'])->name('PedidoSucesso.index')->middleware('permission:ver cardapio');
+Route::post('items/cart/confirmarPedido', [ItemController::class, 'confirmarPedido'])->name('confirmarPedido')->middleware('permission:ver cardapio');
 Route::middleware(['auth'])->group(function (){
     Route::resource('items',ItemController::class);
 });
