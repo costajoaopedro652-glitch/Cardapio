@@ -192,6 +192,6 @@ public function pedidosJson()
         ->get();
 
     return response()->json($orders);
-}composer require spatie/laravel-permission
+}
 }
 
