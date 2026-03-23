@@ -66,11 +66,9 @@ class="flex-1 text-center bg-red-600 hover:bg-red-700 p-6 rounded-xl font-bold t
 🛒 Ir para Carrinho
 
 </a>
-@can('view', App\Models\User::class)
+@can('ver pedidos')
     <a href="{{route('pagina.admin')}}"
 class="flex-1 text-center bg-neutral-800 hover:bg-neutral-700 p-6 rounded-xl font-bold text-2xl transition transform hover:scale-105">
-
-
 
 📦 Ver Pedidos
 

@@ -67,12 +67,14 @@ class="flex-1 text-center bg-red-600 hover:bg-red-700 p-6 rounded-xl font-bold t
 
 </a>
 
-<a href="{{route('pagina.admin')}}"
+@can('ver pedidos')
+    <a href="{{route('pagina.admin')}}"
 class="flex-1 text-center bg-neutral-800 hover:bg-neutral-700 p-6 rounded-xl font-bold text-2xl transition transform hover:scale-105">
 
 📦 Ver Pedidos
 
 </a>
+@endcan
 
 <a href="{{ route('items.index') }}"
 class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bold text-2xl transition transform hover:scale-105">
