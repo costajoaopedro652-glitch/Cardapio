@@ -11,8 +11,13 @@ class Item extends Model
         'name',
         'description',
         'price',
+        'is_available'
     ];
     
+    protected $casts = [
+    'is_available' => 'boolean',
+    ];
+
     public function markUnavailable()
     {
         $this->is_available = false;   //função para marcar item como em falta

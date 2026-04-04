@@ -59,20 +59,21 @@ class DatabaseSeeder extends Seeder
 
         Item::firstOrCreate(
             ['name'=>'hamburguer','categoria'=>'noite'],
-            ['price'=>10]
+            ['price'=>10,'is_available'=>1]
         );
         Item::firstOrCreate(
             ['name'=>'lasanha','categoria'=>'almoço'],
-            ['price'=>15]
+            ['price'=>15,'is_available'=>1]
         );
         Item::firstOrCreate(
             ['name'=>'café','categoria'=>'manha'],
-            ['price'=>4]
+            ['price'=>4,'is_available'=>1]
+            
         );
         Item::firstOrCreate(
             ['name'=>'agua','categoria'=>'tarde'],
-            ['price'=>5]
+            ['price'=>5,'is_available'=>1]
+            
         );
-    }
 }
-
+}
