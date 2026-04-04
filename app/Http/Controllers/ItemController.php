@@ -96,16 +96,19 @@ class ItemController extends Controller
     public function destroy(string $id)
     {
     $orderItem = Order_Item::findOrFail($id);
-    $orderItem->delete();
-
+    if($orderItem->quantidade <= 1){
+        $orderItem->delete();
+    }
+    else{
+        $orderItem->quantidade -= 1;
+        $orderItem->save();
+    }
     return redirect()->back();
     }
 
     public function cart()
 {
-    $order = Order::where('user_id', auth()->id())
-        ->where('status', 'pendente')
-        ->first();
+    $order = Order::where('user_id', auth()->id())->where('status', 'pendente')->first();
 
     $orderItems = $order ? $order->order_items : collect();
 
@@ -136,7 +139,7 @@ public function confirmarPedido()
 ]);
 
 return redirect()->route('PedidoSucesso.index');
-}
+}  
 
 public function PedidoSucesso(){
     return view('items.PedidoSucesso');
