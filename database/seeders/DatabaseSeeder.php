@@ -2,24 +2,77 @@
 
 namespace Database\Seeders;
 
+use App\Models\Item;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
+   public function run()
+{
+    // limpar cache do Spatie
+    app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // User::factory(10)->create();
+    // permissões
+    Permission::firstOrCreate(['name' => 'ver pedidos']);
+    Permission::firstOrCreate(['name' => 'ver cardapio']);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+
+    // roles
+    $admin = Role::firstOrCreate(['name' => 'admin']);
+    $room = Role::firstOrCreate(['name' => 'room']);
+
+    // permissões do admin
+    $admin->syncPermissions([
+        'ver pedidos'
+    ]);
+
+    // permissões do room
+    $room->syncPermissions([
+        'ver cardapio'
+    ]);
+
+    // User Admin
+    $adminUser= User::firstOrCreate(
+        ['email'=>'admin@gmail.com'],
+        [
+            'name'=>'admin',
+            'password'=> Hash::make(12345678)
+        ]
+        );
+        $adminUser->assignRole($admin);
+        //User room
+        $roomUser = User::firstOrcreate(
+            ['email'=>'room@gmail.com'],
+            [
+                'name'=>'room',
+                'password'=> Hash::make(12345678)
+            ]
+            );
+        $roomUser->assignRole($room);
+
+//criação dos items teste
+
+        Item::firstOrCreate(
+            ['name'=>'hamburguer','categoria'=>'noite'],
+            ['price'=>10]
+        );
+        Item::firstOrCreate(
+            ['name'=>'lasanha','categoria'=>'almoço'],
+            ['price'=>15]
+        );
+        Item::firstOrCreate(
+            ['name'=>'café','categoria'=>'manha'],
+            ['price'=>4]
+        );
+        Item::firstOrCreate(
+            ['name'=>'agua','categoria'=>'tarde'],
+            ['price'=>5]
+        );
     }
 }
+
