@@ -59,7 +59,11 @@ transform:scale(0.96);
 <button class="text-sm bg-red-600 px-3 py-1 rounded-lg">
 <a href="{{route('cart.index')}}">🛒carrinho</a>
 </button>
-
+@can('ver pedidos')
+<button class="text-sm bg-red-600 px-3 py-1 rounded-lg">
+<a href="{{route('admin')}}">Página Admin</a>
+</button>
+@endcan
 </header>
 
 <!-- HERO -->

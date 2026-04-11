@@ -51,7 +51,14 @@ Indisponível
 @endif
 
 </div>
+@can('ver pedidos')
+<button
+class="w-full bg-green-600 hover:bg-orange-700 transition p-2 rounded-lg font-semibold">
 
+<a href="{{route('items.editar',$item->id)}}">editar item</a>
+
+</button>
+@endcan
 @endforeach
 
 </div>
@@ -67,14 +74,7 @@ class="flex-1 text-center bg-red-600 hover:bg-red-700 p-6 rounded-xl font-bold t
 
 </a>
 
-@can('ver pedidos')
-    <a href="{{route('pagina.admin')}}"
-class="flex-1 text-center bg-neutral-800 hover:bg-neutral-700 p-6 rounded-xl font-bold text-2xl transition transform hover:scale-105">
 
-📦 Ver Pedidos
-
-</a>
-@endcan
 
 <a href="{{ route('items.index') }}"
 class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bold text-2xl transition transform hover:scale-105">
@@ -82,6 +82,14 @@ class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bol
 ⬅ Voltar
 
 </a>
+@can('ver pedidos')
+<a href="{{route('items.criar')}}"
+class="flex-1 text-center bg-red-600 hover:bg-red-700 p-6 rounded-xl font-bold text-2xl transition transform hover:scale-105">
+
+🛒 criar item
+
+</a>
+@endcan
 </div>
 
 @endsection

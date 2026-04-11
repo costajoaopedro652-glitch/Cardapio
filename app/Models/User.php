@@ -60,4 +60,7 @@ class User extends Authenticatable
     public function order(){                    
         return $this->hasMany(Order::class);  //Um user(quarto) pode ter vários pedidos
     }
+    public function hospede(){
+        return $this->hasMany(Hospede::class, 'room');
+    }
 }

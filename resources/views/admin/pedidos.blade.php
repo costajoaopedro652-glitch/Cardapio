@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pedidos</title>
+<title>Pedidos </title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
@@ -69,6 +69,12 @@ animation: slideOut 0.5s ease forwards;
 class="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded-lg text-sm">
 
 ⬅ Cardápio
+
+</a>
+<a href="{{route('admin')}}"
+class="bg-orange-600 hover:bg-orange-700 px-3 py-1 rounded-lg text-sm">
+
+⬅ voltar
 
 </a>
 

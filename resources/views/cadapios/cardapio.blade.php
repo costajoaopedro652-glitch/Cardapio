@@ -73,5 +73,12 @@ class="flex-1 text-center bg-neutral-800 hover:bg-neutral-700 p-3 rounded-lg fon
 </a>
 
 </div>
+@can('ver pedidos')
+<a href="{{route('items.criar')}}"
+class="flex-1 text-center bg-red-600 hover:bg-red-700 p-6 rounded-xl font-bold text-2xl transition transform hover:scale-105">
 
+🛒 criar item
+
+</a>
+@endcan
 @endsection

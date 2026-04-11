@@ -11,7 +11,8 @@ class Item extends Model
         'name',
         'description',
         'price',
-        'is_available'
+        'is_available',
+        'categoria'
     ];
     
     protected $casts = [

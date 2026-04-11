@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Hospede;
 use App\Models\Item;
 use App\Models\Order;
 use App\Models\Order_Item;
@@ -196,5 +197,129 @@ public function pedidosJson()
 
     return response()->json($orders);
 }
+public function criarItem(){
+    return view('admin.criarItem');
+}
+public function salvar(Request $request){
+    $validarItem = $request->validate([ 
+    'name' => 'required|min:1|string',
+    'description' => 'nullable|min:1|string',
+    'categoria'=>'required|in:almoço,noite,manha,tarde',
+    'price' => 'required|numeric|min:0'
+    ]);
+
+    $validarItem['is_available'] = $request->boolean('is_available');
+
+    Item::firstOrCreate(
+    [
+        'name' => $validarItem['name'],
+        'categoria' => $validarItem['categoria']
+    ],
+    [
+        'description' => $validarItem['description'],
+        'categoria' => $validarItem['categoria'],
+        'is_available' => $validarItem['is_available'],
+        'price' => $validarItem['price']
+    ]
+
+    );
+
+    return redirect()->route('items.index');
+}
+public function editar(Item $item){
+    return view('admin.editar',compact('item'));
 }
 
+public function atualizar(Item $item, Request $request){
+    $validarItem = $request->validate([ 
+    'name' => 'required|min:1|string',
+    'description' => 'nullable|min:1|string',
+    'price' => 'required|numeric|min:0'
+    ]);
+
+    $validarItem['is_available'] = $request->boolean('is_available');
+
+    $item->update([
+        'name'=>$validarItem['name'],
+        'description'=>$validarItem['description'],
+        'price'=>$validarItem['price'],
+        'is_available'=>$validarItem['is_available']
+    ]);
+    return redirect()->route('items.index');
+}
+
+    public function deletar(Item $item){
+        $item->delete();
+        return redirect()->route('items.index');
+    }
+    public function usuarios(){
+
+    $users = User::where('id', '!=', auth()->id())->get();
+
+    return view('admin.users', compact('users'));
+}
+
+public function updateRole(Request $request)
+{
+    $request->validate([
+        'role' => 'required|exists:roles,name',
+        'user_id' => 'required|exists:users,id'
+    ]);
+
+    $user = User::findOrFail($request->user_id);
+
+    if ($user->id === auth()->id()) {
+        abort(403, 'Você não pode alterar sua própria role.');
+    }
+
+    $user->syncRoles([$request->role]);
+    return redirect()->route('admin.users');
+}
+
+public function admin(){
+    return view('admin.admin');
+}
+
+public function historicoPedidos(){
+    $pedidos = Order::where('status','entregue')->get();
+    return view('admin.historicoPedidos',compact('pedidos'));
+}
+
+public function adminCadastrar(){
+    $quartos= User::where('name','!=','admin')->get();
+    return view('admin.cadastroHospedes',compact('quartos'));
+}
+
+public function cadastrarHospede(Request $request){
+    $validarItem=$request->validate([
+        'name'=>'required|string',
+        'room'=>'required|exists:users,id',
+        'data_saida'=>'nullable|date',
+        'cpf'=>'required'
+    ]);
+    $cpf = preg_replace('/\D/', '', $request->cpf);
+    Hospede::create([
+        'name'=>$validarItem['name'],
+        'cpf'=>$cpf,
+        'room'=>$validarItem['room'],
+        'data_saida'=>$validarItem['data_saida']
+    ]);
+
+    return redirect()->route('admin');
+}
+public function hospedes(){
+    $hospedes = Hospede::where('status','hospede')->get();
+    return view('admin.hospedes',compact('hospedes'));
+}
+public function hospedesHistorico(){
+    $hospedes = Hospede::where('status','hospedado')->get();
+    return view('admin.historicoHospedes', compact('hospedes'));
+}
+public function desospedar(Hospede $hospede){
+    $hospede->update([
+        'status'=>'hospedado',
+    ]);
+
+    return redirect()->route('admin.hospedes');
+}
+}
