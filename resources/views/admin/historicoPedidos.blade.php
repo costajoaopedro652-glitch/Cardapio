@@ -3,20 +3,25 @@
 @section('content')
 <div class="max-w-4xl mx-auto px-6 py-12">
 
-    <h1 class="text-4xl font-bold mb-10 text-center">
-        📦 Histórico de Pedidos <a href="{{ route('admin') }}"
-class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bold text-2xl transition transform hover:scale-105">
+    <!-- Título -->
+    <div class="flex items-center justify-between mb-10">
+        <h1 class="text-4xl font-bold">
+            📦 Histórico de Pedidos
+        </h1>
 
-⬅ Voltar
+        <a href="{{ route('admin') }}"
+           class="bg-gray-700 hover:bg-gray-800 px-6 py-3 rounded-xl font-bold transition transform hover:scale-105">
+            ⬅ Voltar
+        </a>
+    </div>
 
-</a>    
-    </h1>
-
+    <!-- Lista de pedidos -->
     <div class="flex flex-col gap-6">
 
         @forelse ($pedidos as $pedido)
-            <div class="bg-neutral-800 p-6 rounded-2xl shadow-lg animate-slideIn">
+            <div class="bg-neutral-800 p-6 rounded-2xl shadow-lg">
 
+                <!-- Cabeçalho -->
                 <div class="flex justify-between items-center mb-4">
                     <div>
                         <p class="text-sm text-gray-400">
@@ -34,6 +39,7 @@ class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bol
                     </p>
                 </div>
 
+                <!-- Itens -->
                 <div>
                     <p class="font-semibold mb-2 text-gray-300">
                         Itens:
@@ -57,6 +63,30 @@ class="flex-1 text-center bg-gray-700 hover:bg-gray-800 p-6 rounded-2xl font-bol
             </p>
         @endforelse
 
+    </div>
+
+    <!-- Download PDF -->
+    <div class="mt-10 bg-neutral-800 p-6 rounded-2xl shadow-lg">
+        <h2 class="text-xl font-bold mb-4">📄 Baixar PDF</h2>
+
+        <form action="{{ route('downloadPedidos') }}" method="GET" class="flex gap-4 items-end flex-wrap">
+
+            <div>
+                <label class="block text-sm text-gray-400">De</label>
+                <input type="date" name="inicio" class="bg-neutral-700 p-2 rounded">
+            </div>
+
+            <div>
+                <label class="block text-sm text-gray-400">Até</label>
+                <input type="date" name="fim" class="bg-neutral-700 p-2 rounded">
+            </div>
+
+            <button type="submit"
+                class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded font-bold">
+                Download
+            </button>
+
+        </form>
     </div>
 
 </div>

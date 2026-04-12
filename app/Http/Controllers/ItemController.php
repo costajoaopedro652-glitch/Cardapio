@@ -7,6 +7,8 @@ use App\Models\Item;
 use App\Models\Order;
 use App\Models\Order_Item;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Foundation\Console\DownCommand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -284,6 +286,10 @@ public function historicoPedidos(){
     $pedidos = Order::where('status','entregue')->get();
     return view('admin.historicoPedidos',compact('pedidos'));
 }
+public function historicoPedidosPdf(){
+    $pedidos = Order::where('status','entregue')->get();
+    return view('admin.historicoPedidosPdf',compact('pedidos'));
+}
 
 public function adminCadastrar(){
     $quartos= User::where('name','!=','admin')->get();
@@ -321,5 +327,22 @@ public function desospedar(Hospede $hospede){
     ]);
 
     return redirect()->route('admin.hospedes');
+}
+public function gerarPDF(Request $request){
+
+    $query= Order::query()->where('status','entregue');
+    if($request->inicio && $request->fim){
+        $query->whereBetween('created_at',[
+            $request->inicio . ' 00:00:00',
+            $request->fim . ' 23:59:59'
+        ]);
+    }
+    $pedidos = $query->get();
+
+    $pdf=Pdf::loadView('admin.historicoPedidosPdf', compact('pedidos'));
+
+    return $pdf->download('pedidos.pdf');
+
+    return view('admin.historicoPedidos',compact('pedidos'));
 }
 }

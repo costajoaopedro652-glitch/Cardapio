@@ -16,8 +16,10 @@ Route::get('items/cart', [ItemController::class, 'cart'])->name('cart.index')->m
 
 //rotas Da Página Dos ADMIN's:
 Route::middleware(['auth'])->group(function(){
+    Route::get('/download/pdf',[ItemController::class,'gerarPDF'])->name('downloadPedidos');
     Route::get('/admin',[ItemController::class,'admin'])->name('admin');
     Route::get('/admin/historicoPedidos',[ItemController::class, 'historicoPedidos'])->name('admin.historicoPedidos');//feito
+    Route::get('/admin/historicoPedidos/pdf',[ItemController::class, 'historicoPedidosPdf'])->name('admin.historicoPedidos.pdf');//feito
     Route::get('admin/cadastrarHospedes',[ItemController::class, 'adminCadastrar'])->name('admin.cadastrar');//feito
     Route::post('admin/cadastrarHospedes',[ItemController::class, 'cadastrarHospede'])->name('admin.cadastrarhospede');//feito
     Route::get('/admin/hospedes',[ItemController::class,'hospedes'])->name('admin.hospedes');//feito
