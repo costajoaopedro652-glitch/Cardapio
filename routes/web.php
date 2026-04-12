@@ -29,6 +29,8 @@ Route::middleware(['auth'])->group(function(){
     Route::post('admin/FinalizarPedido/{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido');//feito
     Route::get('admin/users',[ItemController::class,'usuarios'])->name('admin.users');//feito
     Route::post('admin/users/role',[ItemController::class,'updateRole'])->name('admin.users.role');//feito
+    Route::get('/exportar-excel', [ItemController::class, 'gerarExcel'])
+    ->name('exportar.excel');
 });
 
 //cardápios: 

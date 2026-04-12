@@ -69,24 +69,31 @@
     <div class="mt-10 bg-neutral-800 p-6 rounded-2xl shadow-lg">
         <h2 class="text-xl font-bold mb-4">📄 Baixar PDF</h2>
 
-        <form action="{{ route('downloadPedidos') }}" method="GET" class="flex gap-4 items-end flex-wrap">
+        <form method="GET" class="flex gap-4 items-end flex-wrap">
 
-            <div>
-                <label class="block text-sm text-gray-400">De</label>
-                <input type="date" name="inicio" class="bg-neutral-700 p-2 rounded">
-            </div>
+    <div>
+        <label class="block text-sm text-gray-400">De</label>
+        <input type="date" name="inicio" value="{{ request('inicio') }}" class="bg-neutral-700 p-2 rounded">
+    </div>
 
-            <div>
-                <label class="block text-sm text-gray-400">Até</label>
-                <input type="date" name="fim" class="bg-neutral-700 p-2 rounded">
-            </div>
+    <div>
+        <label class="block text-sm text-gray-400">Até</label>
+        <input type="date" name="fim" value="{{ request('fim') }}" class="bg-neutral-700 p-2 rounded">
+    </div>
 
-            <button type="submit"
-                class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded font-bold">
-                Download
-            </button>
+    <!-- PDF -->
+    <button type="submit" formaction="{{ route('downloadPedidos') }}"
+        class="bg-red-600 hover:bg-red-700 px-6 py-2 rounded font-bold">
+        📄 PDF
+    </button>
 
-        </form>
+    <!-- EXCEL -->
+    <button type="submit" formaction="{{ route('exportar.excel') }}"
+        class="bg-green-600 hover:bg-green-700 px-6 py-2 rounded font-bold">
+        📊 Excel
+    </button>
+
+</form>
     </div>
 
 </div>

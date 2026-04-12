@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PedidosExport as PedidosExportAlias;
 use App\Models\Hospede;
 use App\Models\Item;
 use App\Models\Order;
@@ -11,6 +13,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Foundation\Console\DownCommand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class ItemController extends Controller
 {
@@ -344,5 +347,12 @@ public function gerarPDF(Request $request){
     return $pdf->download('pedidos.pdf');
 
     return view('admin.historicoPedidos',compact('pedidos'));
+}
+public function gerarExcel(Request $request)
+{
+    return Excel::download(
+        new PedidosExportAlias($request->inicio, $request->fim),
+        'pedidos.xlsx'
+    );
 }
 }
