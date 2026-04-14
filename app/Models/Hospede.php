@@ -11,7 +11,12 @@ class Hospede extends Model
         'room',
         'cpf',
         'status',
-        'data_saida'
+        'data_saida',
+        'cep',
+        'rua',
+        'bairro',
+        'cidade',
+        'estado',
     ];
 
     public function user(){

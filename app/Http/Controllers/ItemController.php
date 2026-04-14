@@ -300,19 +300,34 @@ public function adminCadastrar(){
 }
 
 public function cadastrarHospede(Request $request){
-    $validarItem=$request->validate([
-        'name'=>'required|string',
-        'room'=>'required|exists:users,id',
-        'data_saida'=>'nullable|date',
-        'cpf'=>'required'
-    ]);
-    $cpf = preg_replace('/\D/', '', $request->cpf);
-    Hospede::create([
-        'name'=>$validarItem['name'],
-        'cpf'=>$cpf,
-        'room'=>$validarItem['room'],
-        'data_saida'=>$validarItem['data_saida']
-    ]);
+    $validarItem = $request->validate([
+    'name' => 'required|string',
+    'room' => 'required|exists:users,id',
+    'data_saida' => 'nullable|date',
+    'cpf' => 'required',
+    'cep' => 'nullable',
+    'rua' => 'nullable|string',
+    'bairro' => 'nullable|string',
+    'cidade' => 'nullable|string',
+    'estado' => 'nullable|string',
+]);
+
+$cpf = preg_replace('/\D/', '', $request->cpf);
+$cep = preg_replace('/\D/', '', $request->cep);
+
+Hospede::create([
+    'name' => $validarItem['name'],
+    'cpf' => $cpf,
+    'room' => $validarItem['room'],
+    'data_saida' => $validarItem['data_saida'],
+
+    // 👇 novos campos
+    'cep' => $cep,
+    'rua' => $validarItem['rua'] ?? null,
+    'bairro' => $validarItem['bairro'] ?? null,
+    'cidade' => $validarItem['cidade'] ?? null,
+    'estado' => $validarItem['estado'] ?? null,
+]);
 
     return redirect()->route('admin');
 }
@@ -354,5 +369,21 @@ public function gerarExcel(Request $request)
         new PedidosExportAlias($request->inicio, $request->fim),
         'pedidos.xlsx'
     );
+}
+public function gerarPDFhospedes(Request $request){
+
+    $query= Hospede::query();
+    if($request->inicio && $request->fim)
+        $query->whereBetween('created_at',[
+            $request->inicio . '00:00:00',
+            $request->fim . '23:59:59'
+        ]);
+        $hospedes = $query->get();
+        $pdf=Pdf::loadView('admin.historicoHospedesPdf', compact('hospedes'));
+        return $pdf->download('hospedes.pdf');
+        return view('admin.historicoPedidos',compact('hospedes'));
+}
+public function gerarExcelHospedes(Request $request){
+    
 }
 }

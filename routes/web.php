@@ -16,7 +16,6 @@ Route::get('items/cart', [ItemController::class, 'cart'])->name('cart.index')->m
 
 //rotas Da Página Dos ADMIN's:
 Route::middleware(['auth'])->group(function(){
-    Route::get('/download/pdf',[ItemController::class,'gerarPDF'])->name('downloadPedidos');
     Route::get('/admin',[ItemController::class,'admin'])->name('admin');
     Route::get('/admin/historicoPedidos',[ItemController::class, 'historicoPedidos'])->name('admin.historicoPedidos');//feito
     Route::get('/admin/historicoPedidos/pdf',[ItemController::class, 'historicoPedidosPdf'])->name('admin.historicoPedidos.pdf');//feito
@@ -29,8 +28,11 @@ Route::middleware(['auth'])->group(function(){
     Route::post('admin/FinalizarPedido/{id}',[ItemController::class,'FinalizarPedido'])->name('FinalizarPedido');//feito
     Route::get('admin/users',[ItemController::class,'usuarios'])->name('admin.users');//feito
     Route::post('admin/users/role',[ItemController::class,'updateRole'])->name('admin.users.role');//feito
-    Route::get('/exportar-excel', [ItemController::class, 'gerarExcel'])
+    Route::get('/download/pdfHospedes',[ItemController::class,'gerarPDFhospedes'])->name('downloadHospedes');
+    Route::get('/exportar-excel', [ItemController::class, 'gerarExcelHospedes'])
     ->name('exportar.excel');
+    Route::get('/exportar-excelHospedes', [ItemController::class, 'gerarExcelHospedes'])
+    ->name('exportar.excelHospedes');
 });
 
 //cardápios: 
