@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PedidosExport as PedidosExportAlias;
+use App\Exports\UsersExport;
 use App\Models\Hospede;
 use App\Models\Item;
 use App\Models\Order;
@@ -370,6 +371,7 @@ public function gerarExcel(Request $request)
         'pedidos.xlsx'
     );
 }
+
 public function gerarPDFhospedes(Request $request){
 
     $query= Hospede::query();
@@ -384,6 +386,8 @@ public function gerarPDFhospedes(Request $request){
         return view('admin.historicoPedidos',compact('hospedes'));
 }
 public function gerarExcelHospedes(Request $request){
-    
+    return Excel::download(
+        new UsersExport($request->fim, $request->inicio),'hospedes.xlsx'
+    );
 }
 }
